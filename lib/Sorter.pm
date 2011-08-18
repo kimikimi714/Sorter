@@ -1,44 +1,56 @@
 # implement this
 package Sorter;
 
+use strict;
+use warnings;
+
 sub new{
    my $class = shift;
-   my $self = {};
-   @array = ();
-   return bless $self,$class;
+   my $self = {
+       array => []
+   };
+   return bless $self, $class;
 }
 
 sub set_values{
-	my $class;
-	($class,@array) = @_;
+	my $self = shift;
+	( @{ $self->{array} } )= @_;
 }
 
 sub get_values{
-	@array;
+    my ( $self ) = @_; 
+    @{ $self->{array} };
 }
 
 sub sort{
-	&Qsort(0,@array-1,@array);
+    my ( $self ) = @_;
+    if ( @{ $self->{array} } == 0 ) { return; }
+    warn "要素数-1: " . @{ $self->{array} }-1;
+    $self->Qsort( 0, @{ $self->{array} }-1 );
 }
 
 sub Qsort{
-	my $left; my $right;
-	($left,$right,@array) = @_;
-	
-	my $i=$left;
-	my $j=$right;
-	my $pivot = $array[int(($left + $right) /2)];
+	my ( $self, $left, $right ) = @_;
+	my ( @array ) = ( @{ $self->{array} } );
+
+	my $i = $left;
+	warn "i: " . $i;
+	$right = 0 if $right < 0;
+	my $j = $right;
+	warn $j;
+	my $pivot = $array[ int( ( $left + $right ) /2 ) ];
+	warn $array[ int( ( $left + $right ) /2 ) ];
 	while(1){
-		while ($array[$i] < $pivot){ $i++;}
-		while ($pivot < $array[$j]){ $j--;}
-		if($j <= $i){ last;}
+		while ( $array[ $i ] < $pivot ){ $i++; }
+		while ( $pivot < $array[ $j ] ){ $j--; }
+		if ( $j <= $i ) { last; }
 		
-		($array[$i],$array[$j])=($array[$j],$array[$i]);
+		( $array[ $i ], $array[ $j ] ) = ( $array[ $j ], $array[ $i ] );
 		
 		$i++; $j--;
 	}
-	if($left < $i-1) {&Qsort($left, $i-1, @array);}
-	if($j+1 < $right) {&Qsort($j+1, $right, @array);}
+	if( $left < $i-1 ) { $self->Qsort( $left, $i-1 ); }
+	if( $j+1 < $right ) { $self->Qsort( $j+1, $right ); }
 }
 
 1; # DO NOT FORGET THIS!!
